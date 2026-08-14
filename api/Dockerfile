@@ -1,5 +1,6 @@
 # base image
-FROM python:3.12-slim-bookworm AS base
+ARG PYTHON_BASE_IMAGE=python:3.12-slim-bookworm
+FROM ${PYTHON_BASE_IMAGE} AS base
 
 WORKDIR /app/api
 

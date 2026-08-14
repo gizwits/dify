@@ -132,6 +132,14 @@ class AudioService:
 
         extension = file.mimetype
         if extension not in [f"audio/{ext}" for ext in AUDIO_EXTENSIONS]:
+            logger.warning(
+                "Rejected ASR upload with unsupported audio type: "
+                "filename=%r, content_type=%r, mimetype=%r, allowed_mime_types=%s",
+                file.filename,
+                file.content_type,
+                file.mimetype,
+                sorted(f"audio/{ext}" for ext in AUDIO_EXTENSIONS),
+            )
             raise UnsupportedAudioTypeServiceError()
 
         file_content = file.stream.read()
