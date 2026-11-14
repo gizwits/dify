@@ -1,0 +1,13 @@
+Derived from langgenius/dify-official-plugins, models/volcengine_maas.
+Upstream commit: 60804e30f6fa41fbe890c02c9849b0bdbe28d13a
+Upstream plugin version: 0.0.58
+Source: https://github.com/langgenius/dify-official-plugins
+License: Apache-2.0 (see LICENSE).
+
+Local changes (2026-11-15):
+- Extract speech-to-text functionality into a separately named provider.
+- Decode M4A and other audio containers using PyAV, normalize to 16 kHz mono PCM.
+- Add new-console API Key and legacy speech credentials to the configuration UI.
+- Use the fixed sentence-recognition endpoint, TLS verification, bounded audio,
+  checked protocol parsing, and final-response handling.
+- Add real AAC/M4A decoding and mocked wire-protocol regression tests.

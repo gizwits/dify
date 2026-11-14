@@ -1,0 +1,31 @@
+version: 0.1.0
+type: plugin
+author: gizwits
+name: volcengine_asr_m4a
+label:
+  en_US: Volcengine ASR (M4A)
+  zh_Hans: 火山语音识别（M4A 兼容）
+description:
+  en_US: Volcengine speech recognition with server-side M4A decoding. Derived from langgenius/volcengine_maas.
+  zh_Hans: 基于官方 volcengine_maas 的语音识别插件，支持 M4A 服务端解码，无需 App 转码。
+icon: icon.svg
+created_at: '2026-11-15T00:00:00+08:00'
+resource:
+  memory: 268435456
+  permission:
+    model:
+      enabled: true
+      speech2text: true
+plugins:
+  models:
+    - provider/volcengine_asr_m4a.yaml
+meta:
+  version: 0.0.1
+  arch:
+    - amd64
+    - arm64
+  runner:
+    language: python
+    version: '3.12'
+    entrypoint: main
+  minimum_dify_version: 1.10.0

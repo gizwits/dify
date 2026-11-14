@@ -1,0 +1,97 @@
+provider: volcengine_asr_m4a
+label:
+  en_US: Volcengine ASR (M4A)
+  zh_Hans: 火山语音识别（M4A 兼容）
+description:
+  en_US: Transcribe uploaded recordings with Volcengine. M4A is decoded in the plugin.
+  zh_Hans: 使用火山识别上传的录音，M4A 在插件端解码。
+icon_small:
+  en_US: icon.svg
+icon_large:
+  en_US: icon.svg
+background: '#F9FAFB'
+supported_model_types:
+  - speech2text
+configurate_methods:
+  - customizable-model
+model_credential_schema:
+  model:
+    label:
+      en_US: Model name
+      zh_Hans: 模型名称
+    placeholder:
+      en_US: doubao-seed-asr
+      zh_Hans: doubao-seed-asr
+  credential_form_schemas:
+    - variable: auth_method
+      label:
+        en_US: Authentication
+        zh_Hans: 鉴权方式
+      type: select
+      required: true
+      default: api_key
+      options:
+        - value: api_key
+          label:
+            en_US: API Key (new console)
+            zh_Hans: API Key（新版控制台）
+        - value: legacy
+          label:
+            en_US: App ID + Access Token (legacy)
+            zh_Hans: App ID + Access Token（旧版）
+    - variable: api_key
+      label:
+        en_US: Speech API Key
+        zh_Hans: 语音 API Key
+      type: secret-input
+      required: true
+      show_on:
+        - variable: auth_method
+          value: api_key
+    - variable: app_key
+      label:
+        en_US: Speech App ID
+        zh_Hans: 语音应用 App ID
+      type: text-input
+      required: true
+      show_on:
+        - variable: auth_method
+          value: legacy
+    - variable: access_key
+      label:
+        en_US: Speech Access Token
+        zh_Hans: 语音 Access Token
+      type: secret-input
+      required: true
+      show_on:
+        - variable: auth_method
+          value: legacy
+    - variable: resource_id
+      label:
+        en_US: Resource ID
+        zh_Hans: 资源 ID（须已开通）
+      type: select
+      required: true
+      default: volc.seedasr.sauc.duration
+      options:
+        - value: volc.seedasr.sauc.duration
+          label:
+            en_US: ASR 2.0 - duration
+            zh_Hans: ASR 2.0 小时版
+        - value: volc.seedasr.sauc.concurrent
+          label:
+            en_US: ASR 2.0 - concurrent
+            zh_Hans: ASR 2.0 并发版
+        - value: volc.bigasr.sauc.duration
+          label:
+            en_US: ASR 1.0 - duration
+            zh_Hans: ASR 1.0 小时版
+        - value: volc.bigasr.sauc.concurrent
+          label:
+            en_US: ASR 1.0 - concurrent
+            zh_Hans: ASR 1.0 并发版
+extra:
+  python:
+    provider_source: provider/volcengine_asr_m4a.py
+    model_sources:
+      - models/speech2text/speech2text.py
