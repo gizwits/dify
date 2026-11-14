@@ -41,7 +41,7 @@ Tests available voice retrieval:
 ## Key Concepts
 
 **Audio Formats:**
-- Supported: mp3, wav, m4a, flac, ogg, opus, webm
+- Upload MIME types: audio/mp3, audio/wav, audio/m4a (including audio/x-m4a), audio/amr, audio/mpga
 - File size limit: 30 MB
 
 **App Modes:**
@@ -53,6 +53,7 @@ Tests available voice retrieval:
 - text_to_speech: Enables TTS functionality
 """
 
+import io
 from decimal import Decimal
 from typing import Any
 from unittest.mock import MagicMock, Mock, create_autospec, patch
@@ -227,6 +228,25 @@ class TestAudioServiceASR:
     @pytest.fixture(autouse=True)
     def _bind_sqlite_session(self, sqlite_session: Session) -> None:
         self.session = sqlite_session
+
+    @pytest.mark.parametrize("content_type", ["audio/m4a", "audio/x-m4a", "audio/x-m4a; codecs=mp4a.40.2"])
+    @patch("services.audio_service.ModelManager.for_tenant", autospec=True)
+    def test_transcript_asr_accepts_m4a_mime_alias(
+        self, mock_model_manager_class, factory: AudioServiceTestDataFactory, content_type: str
+    ):
+        """Both M4A MIME names reach the provider with the original bytes intact."""
+        config = factory.create_app_model_config_mock(speech_to_text_dict={"enabled": True})
+        app = factory.create_app_mock(mode=AppMode.CHAT, app_model_config=config)
+        audio = b"m4a audio bytes"
+        file = FileStorage(stream=io.BytesIO(audio), filename="recording.m4a", content_type=content_type)
+        model = mock_model_manager_class.return_value.get_default_model_instance.return_value
+        model.invoke_speech2text.return_value = "M4A transcript"
+
+        result = AudioService.transcript_asr(app_model=app, file=file, session=self.session)
+
+        assert result == {"text": "M4A transcript"}
+        model.invoke_speech2text.assert_called_once()
+        assert model.invoke_speech2text.call_args.kwargs["file"].getvalue() == audio
 
     @patch("services.audio_service.ModelManager.for_tenant", autospec=True)
     def test_transcript_asr_success_chat_mode(self, mock_model_manager_class, factory: AudioServiceTestDataFactory):
