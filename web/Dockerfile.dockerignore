@@ -8,8 +8,7 @@
 !e2e/
 !e2e/package.json
 !packages/
-!packages/**/
-!packages/**/package.json
+!packages/**
 !sdks/
 !sdks/nodejs-client/
 !sdks/nodejs-client/package.json
@@ -34,3 +33,11 @@ web/*.iws
 web/*.ipr
 e2e/node_modules
 sdks/nodejs-client/node_modules
+
+# Exclude host dependencies and local build output from workspace packages.
+**/node_modules
+**/.pnpm-store
+**/dist
+**/.next
+**/.env
+**/.env.*
